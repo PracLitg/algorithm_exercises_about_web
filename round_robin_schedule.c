@@ -7,6 +7,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #define SRV_NUM 10
 #define MAX_LEN 20
@@ -23,6 +24,7 @@ int getGcd();
 int getArrayGcd();
 int getMaxWeight();
 int getServer();
+
 
 int main(int argc, char const *argv[]) {
     srand(time(NULL));
@@ -50,6 +52,7 @@ int main(int argc, char const *argv[]) {
     memset(request_statistics, 0, sizeof(request_statistics));
     for (i = 1; i <= 100; i++) {
         res = getServer();
+        assert(res >= -1);
         request_statistics[res] += 1;
         printf("Request %2d is sent to %s with weight %d\n", i,
                 servers[res].ip, servers[res].weight);
@@ -64,8 +67,10 @@ int main(int argc, char const *argv[]) {
     return 0;
 }
 
+
 int getGcd(int fir, int sec) {
     int temp = fir % sec;
+
     if (temp == 0) {
         return sec;
     } else {
@@ -73,9 +78,11 @@ int getGcd(int fir, int sec) {
     }
 }
 
+
 // 求权重的最大公约数
 int getArrayGcd() {
     int i, res;
+
     res = getGcd(servers[0].weight, servers[1].weight);
     for (i = 2; i < SRV_NUM; i++) {
         res = getGcd(res, servers[i].weight);
@@ -83,9 +90,11 @@ int getArrayGcd() {
     return res;
 }
 
+
 // 求最大权重值
 int getMaxWeight() {
     int i, max_wgt = -1;
+
     for (i = 0; i < SRV_NUM; i++) {
         if (max_wgt < servers[i].weight) {
             max_wgt = servers[i].weight;
@@ -93,6 +102,7 @@ int getMaxWeight() {
     }
     return max_wgt;
 }
+
 
 // 获取新连接选择的服务器编号
 int getServer() {
